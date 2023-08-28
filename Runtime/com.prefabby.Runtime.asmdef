@@ -1,0 +1,15 @@
+{
+	"name": "com.prefabby.unityplugin.Runtime",
+	"references": [
+		"com.prefabby.unityplugin.Common"
+	],
+	"includePlatforms": [],
+	"excludePlatforms": [],
+	"allowUnsafeCode": false,
+	"overrideReferences": false,
+	"precompiledReferences": [],
+	"autoReferenced": true,
+	"defineConstraints": [],
+	"versionDefines": [],
+	"noEngineReferences": false
+}

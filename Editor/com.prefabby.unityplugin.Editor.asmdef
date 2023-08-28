@@ -1,0 +1,22 @@
+{
+    "name": "com.prefabby.unityplugin.Editor",
+    "rootNamespace": "",
+    "references": [
+		"com.prefabby.unityplugin.Common",
+        "com.prefabby.unityplugin.Runtime",
+        "Unity.EditorCoroutines.Editor",
+        "Newtonsoft.Json",
+        "Newtonsoft.Json.Linq"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

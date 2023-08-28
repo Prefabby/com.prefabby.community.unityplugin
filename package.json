@@ -1,0 +1,19 @@
+{
+	"name": "com.prefabby.unityplugin",
+	"displayName": "Prefabby",
+	"version": "0.1.0",
+	"unity": "2021.3",
+	"description": "Prefabby is a platform to share, download and remix creations built out of prefabs.",
+	"author": {
+		"name": "Matthias Gall",
+		"email": "matt@prefabby.com",
+		"url": "https://prefabby.com"
+	},
+	"license": "AGPL-3.0-or-later",
+	"keywords": [ "prefabby", "prefab", "asset", "scene", "share", "collaboration" ],
+	"category": "Tools",
+	"dependencies": {
+		"com.unity.editorcoroutines": "1.0.0",
+		"com.unity.nuget.newtonsoft-json": "2.0.2"
+	}
+}
