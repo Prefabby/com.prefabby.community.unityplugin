@@ -116,6 +116,17 @@ class JsonV1Deserializer : IDeserializer
 
 		tree.ids.Add(go, serializedGameObject.id);
 
+		if (serializedGameObject.status != null)
+		{
+			if (serializedGameObject.status == SerializedGameObjectStatus.Active)
+			{
+				go.SetActive(true);
+			}
+			else if (serializedGameObject.status == SerializedGameObjectStatus.Inactive)
+			{
+				go.SetActive(false);
+			}
+		}
 		if (serializedGameObject.name != null)
 		{
 			go.name = serializedGameObject.name;

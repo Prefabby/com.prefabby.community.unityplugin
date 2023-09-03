@@ -38,7 +38,7 @@ public class SerializedGameObject
 {
 
 	public string id;
-	public SerializedGameObjectStatus status;
+	public SerializedGameObjectStatus? status;
 	public string name;
 	public string path;
 	public int? siblingIndex;

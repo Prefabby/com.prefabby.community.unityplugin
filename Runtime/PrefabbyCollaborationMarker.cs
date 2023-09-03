@@ -58,6 +58,7 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 	{
 
 		public int instanceId;
+		public bool active;
 		public int siblingIndex;
 		public int parentInstanceId;
 		public string name;
@@ -77,6 +78,7 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 		{
 			return h != null &&
 					instanceId == h.instanceId &&
+					active == h.active &&
 					siblingIndex == h.siblingIndex &&
 					parentInstanceId == h.parentInstanceId &&
 					name == h.name &&
@@ -89,13 +91,12 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 		public override int GetHashCode()
 		{
 			return HashCode.Combine(
-				instanceId, siblingIndex, parentInstanceId, name, materialIds, id,
+				instanceId, active, siblingIndex, parentInstanceId, name, materialIds, id,
 				HashCode.Combine(position, rotation, scale)
 			);
 		}
 
 	}
-
 
 	public struct MaterialChange
 	{
@@ -104,7 +105,6 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 		public string materialPath;
 
 	}
-
 
 	[Serializable]
 	private struct ParticipantInfo
@@ -117,6 +117,7 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 
 	public event Action<Transform> OnTransformAdded;
 	public event Action<Transform, Vector3?, Quaternion?, Vector3?> OnTransformChanged;
+	public event Action<Transform> OnGameObjectActiveToggled;
 	public event Action<Transform, string> OnNameChanged;
 	public event Action<string, string, string, string> OnTransformRemoved;
 	public event Action<Transform, List<int>> OnMaterialsChanged;
@@ -183,6 +184,7 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 			HierarchyItem hierarchyItem = new()
 			{
 				instanceId = transform.GetInstanceID(),
+				active = transform.gameObject.activeSelf,
 				siblingIndex = transform.GetSiblingIndex(),
 				parentInstanceId = transform.parent == null ? 0 : transform.parent.GetInstanceID(),
 				name = transform.name,
@@ -345,10 +347,16 @@ public class PrefabbyCollaborationMarker : MonoBehaviour
 				if (!addedInstanceIds.Contains(item.instanceId) && !removedInstanceIds.Contains(item.instanceId))
 				{
 					HierarchyItem oldItem = hierarchy.First(old => old.instanceId == item.instanceId);
+					if (oldItem.active != item.active)
+					{
+						DebugUtils.Log(DebugContext.TransformChangesOutgoing, $"Active state change: id: {item.instanceId} // active: {item.active}");
+						Transform obj = EditorUtility.InstanceIDToObject(item.instanceId) as Transform;
+						OnGameObjectActiveToggled?.Invoke(obj);
+					}
 					if (oldItem.name != item.name)
 					{
 						// Name change
-						//Debug.Log("NAME CHANGE: id: " + item.instanceId + " /// name: " + item.name + " /// silbing index: " + item.siblingIndex + " /// parent id: " + item.parentInstanceId);
+						DebugUtils.Log(DebugContext.TransformChangesOutgoing, $"Name change: id: {item.instanceId} /// name: {item.name} /// silbing index: {item.siblingIndex} /// parent id: {item.parentInstanceId}");
 						Transform obj = EditorUtility.InstanceIDToObject(item.instanceId) as Transform;
 						OnNameChanged?.Invoke(obj, item.name);
 					}

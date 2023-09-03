@@ -23,16 +23,20 @@ namespace Prefabby
 
 class TransformsChangedMessage : BaseMessage
 {
+
 	public class Transform
 	{
+
 		public string id;
 		public string parentId;
 		public string path;
 
+		public SerializedGameObjectStatus? status;
 		public SerializedVector position;
 		public SerializedVector rotation;
 		public SerializedVector scale;
 		public string name;
+
 	}
 
 	public List<Transform> transforms;

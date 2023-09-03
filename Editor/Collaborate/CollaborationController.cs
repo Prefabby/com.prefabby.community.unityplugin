@@ -68,6 +68,7 @@ class CollaborationController
 		marker.OnTransformAdded += HandleTransformAdded;
 		marker.OnTransformChanged += HandleTransformChanged;
 		marker.OnTransformRemoved += HandleTransformRemoved;
+		marker.OnGameObjectActiveToggled += HandleGameObjectActiveToggled;
 		marker.OnNameChanged += HandleNameChanged;
 		marker.OnMaterialsChanged += HandleMaterialsChanged;
 		marker.OnTransformReparented += HandleTransformReparented;
@@ -99,6 +100,7 @@ class CollaborationController
 			marker.OnTransformAdded -= HandleTransformAdded;
 			marker.OnTransformChanged -= HandleTransformChanged;
 			marker.OnTransformRemoved -= HandleTransformRemoved;
+			marker.OnGameObjectActiveToggled -= HandleGameObjectActiveToggled;
 			marker.OnNameChanged -= HandleNameChanged;
 			marker.OnTransformReparented -= HandleTransformReparented;
 		}
@@ -321,6 +323,26 @@ class CollaborationController
 			path = path
 		};
 		stompApi.SendMessage(transformRemovedMessage);
+	}
+
+	private void HandleGameObjectActiveToggled(Transform transform)
+	{
+		(SerializedGameObject sgo, string parentId, string path) = GetOrCreateSerializedGameObjectOutgoing(transform.gameObject);
+
+		TransformsChangedMessage transformsChangedMessage = new()
+		{
+			transforms = new List<TransformsChangedMessage.Transform>()
+			{
+				new TransformsChangedMessage.Transform()
+				{
+					id = sgo.id,
+					parentId = parentId,
+					path = path,
+					status = transform.gameObject.activeSelf ? SerializedGameObjectStatus.Active : SerializedGameObjectStatus.Inactive
+				}
+			}
+		};
+		stompApi.SendMessage(transformsChangedMessage);
 	}
 
 	private void HandleNameChanged(Transform transform, string name)
@@ -673,6 +695,17 @@ class CollaborationController
 					copyToChange.Name = go.transform.name;
 				}
 			}
+			if (transformChange.status is SerializedGameObjectStatus status)
+			{
+				if (status == SerializedGameObjectStatus.Active)
+				{
+					go.SetActive(true);
+				}
+				else if (status == SerializedGameObjectStatus.Inactive)
+				{
+					go.SetActive(false);
+				}
+			}
 		}
 
 		RefreshSceneView();
@@ -780,7 +813,8 @@ class CollaborationController
 		}
 		else
 		{
-			state.participants.Add(new Participant {
+			state.participants.Add(new Participant
+			{
 				id = connectMessage.origin,
 				displayName = connectMessage.displayName,
 				sids = new()

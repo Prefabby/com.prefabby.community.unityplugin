@@ -168,7 +168,14 @@ class JsonV1Serializer : ISerializer
 		GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
 
 		twoTransformsVisitor.VisitAll(prefab.transform, go.transform, (Transform prefabTransform, Transform sceneTransform) => {
-			if (prefabTransform.name != sceneTransform.name || prefabTransform.localPosition != sceneTransform.localPosition || prefabTransform.localRotation != sceneTransform.localRotation || prefabTransform.localScale != sceneTransform.localScale)
+			List<MaterialReference> materialReferences = null;
+			if (prefabTransform.gameObject.activeSelf != sceneTransform.gameObject.activeSelf ||
+				prefabTransform.name != sceneTransform.name ||
+				prefabTransform.localPosition != sceneTransform.localPosition ||
+				prefabTransform.localRotation != sceneTransform.localRotation ||
+				prefabTransform.localScale != sceneTransform.localScale ||
+				(materialReferences = EditorUtils.FindMaterialChanges(sceneTransform.gameObject, prefabTransform.gameObject, dictionary)) != null
+			)
 			{
 				SerializedGameObject result;
 				if (tree.ids.TryGetValue(sceneTransform.gameObject, out string id))
@@ -189,6 +196,10 @@ class JsonV1Serializer : ISerializer
 
 					tree.gameObjects.Add(result);
 				}
+				if (prefabTransform.gameObject.activeSelf != sceneTransform.gameObject.activeSelf)
+				{
+					result.status = sceneTransform.gameObject.activeSelf ? SerializedGameObjectStatus.Active : SerializedGameObjectStatus.Inactive;
+				}
 				if (prefabTransform.name != sceneTransform.name)
 				{
 					result.name = sceneTransform.name;
@@ -204,6 +215,10 @@ class JsonV1Serializer : ISerializer
 				if (prefabTransform.localScale != sceneTransform.localScale)
 				{
 					result.scale = new SerializedVector(sceneTransform.localScale);
+				}
+				if (materialReferences != null)
+				{
+					result.materials = materialReferences;
 				}
 			}
 		});
