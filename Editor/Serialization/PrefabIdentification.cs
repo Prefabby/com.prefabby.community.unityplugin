@@ -86,7 +86,7 @@ class PrefabIdentification
 					// If there are still unknown ones, take note
 					if (numberOfUnknownComponents > 0)
 					{
-						DebugUtils.Log(DebugContext.PrefabIdentification, $"GO {go.name} is not a prefab and has {numberOfUnknownComponents} unknown components!");
+						DebugUtils.Log(DebugContext.PrefabIdentification, $"GO {go.name} is not a prefab and has {numberOfUnknownComponents} unknown components!", go);
 						// TODO make this a setting: should non-prefab GOs with components raise an error or should they be ignored?
 						invalidTransforms++;
 					}
