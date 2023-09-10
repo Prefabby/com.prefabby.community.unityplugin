@@ -104,6 +104,11 @@ class SyntyStudioArtPackHelper : IArtPackHelper
 				}
 			}
 		}
+		else if (name.StartsWith("SM_Bld_Base_"))
+		{
+			// New with Dark Fantasy
+			fullPath += "Base/";
+		}
 		else if (name.StartsWith("SM_Bld_"))
 		{
 			if (hint.key.Contains("/Pnb"))
