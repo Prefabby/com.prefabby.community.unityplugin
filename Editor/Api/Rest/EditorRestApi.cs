@@ -33,20 +33,20 @@ class EditorRestApi : CommonRestApi
 {
 
 	private readonly object owner;
-	private readonly string apiHost;
+	private readonly ISettingsAccessor settingsAccessor;
 
-	public EditorRestApi(object owner, string apiHost)
+	public EditorRestApi(object owner, ISettingsAccessor settingsAccessor)
 	{
 		this.owner = owner;
-		this.apiHost = apiHost;
+		this.settingsAccessor = settingsAccessor;
 
-		DebugUtils.Log(DebugContext.RestApi, $"Initializing REST API with host {apiHost}");
+		DebugUtils.Log(DebugContext.RestApi, $"Initializing REST API with host {settingsAccessor.GetApiHost()}");
 	}
 
 	public void GetUserDetails(string accessKey, Action<MyUserInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			GetUserDetailsCoroutine(apiHost, accessKey, successCallback, errorCallback),
+			GetUserDetailsCoroutine(settingsAccessor.GetApiHost(), accessKey, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -75,14 +75,14 @@ class EditorRestApi : CommonRestApi
 	public void GetStorefrontAssets(string query, Action<GetStorefrontAssetsResponse> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			GetStorefrontAssetsCoroutine(apiHost, query, successCallback, errorCallback),
+			GetStorefrontAssetsCoroutine(Region.DeriveStorefrontApiHost(settingsAccessor.GetApiHost()), query, successCallback, errorCallback),
 			owner
 		);
 	}
 
 	private IEnumerator GetStorefrontAssetsCoroutine(string apiHost, string query, Action<GetStorefrontAssetsResponse> successCallback, Action errorCallback)
 	{
-		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/storefront/assets?query=" + UnityWebRequest.EscapeURL(query));
+		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/creations?query=" + UnityWebRequest.EscapeURL(query));
 		yield return request.SendWebRequest();
 
 		DebugUtils.Log(DebugContext.RestApi, $"GetStorefrontAssets result: {request.downloadHandler.text}");
@@ -129,7 +129,7 @@ class EditorRestApi : CommonRestApi
 	public void GetAsset(string assetId, bool count, Action<AssetInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			GetAssetCoroutine(apiHost, assetId, count, successCallback, errorCallback),
+			GetAssetCoroutine(Region.DeriveStorefrontApiHost(settingsAccessor.GetApiHost()), assetId, count, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -137,7 +137,7 @@ class EditorRestApi : CommonRestApi
 	public void PublishAsset(string accessKey, CreateAssetRequest request, Action<AssetInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			CreateOrUpdateAssetCoroutine(apiHost, accessKey, null, request, successCallback, errorCallback),
+			CreateOrUpdateAssetCoroutine(settingsAccessor.GetApiHost(), accessKey, null, request, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -145,7 +145,7 @@ class EditorRestApi : CommonRestApi
 	public void UpdateAsset(string accessKey, string assetId, CreateAssetRequest request, Action<AssetInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			CreateOrUpdateAssetCoroutine(apiHost, accessKey, assetId, request, successCallback, errorCallback),
+			CreateOrUpdateAssetCoroutine(settingsAccessor.GetApiHost(), accessKey, assetId, request, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -180,7 +180,7 @@ class EditorRestApi : CommonRestApi
 	public void ListCollaborations(string accessKey, Action<List<CollaborationShortInfo>> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			ListCollaborationsCoroutine(apiHost, accessKey, successCallback, errorCallback),
+			ListCollaborationsCoroutine(settingsAccessor.GetApiHost(), accessKey, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -210,10 +210,10 @@ class EditorRestApi : CommonRestApi
 
 	public void StartCollaboration(string accessKey, CreateCollaborationRequest createCollaborationRequest, Action<CollaborationInfo> successCallback, Action errorCallback)
 	{
-		DebugUtils.Log(DebugContext.Collaboration, "Calling start collaboration coroutine with apiHost: " + apiHost);
+		DebugUtils.Log(DebugContext.Collaboration, $"Calling start collaboration coroutine with apiHost: {settingsAccessor.GetApiHost()}");
 
 		EditorCoroutineUtility.StartCoroutine(
-			StartCollaborationCoroutine(apiHost, accessKey, createCollaborationRequest, successCallback, errorCallback),
+			StartCollaborationCoroutine(settingsAccessor.GetApiHost(), accessKey, createCollaborationRequest, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -250,7 +250,7 @@ class EditorRestApi : CommonRestApi
 	public void GetCollaboration(string accessKey, string collaborationId, Action<CollaborationInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			GetCollaborationCoroutine(apiHost, accessKey, collaborationId, successCallback, errorCallback),
+			GetCollaborationCoroutine(settingsAccessor.GetApiHost(), accessKey, collaborationId, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -279,7 +279,7 @@ class EditorRestApi : CommonRestApi
 	public void JoinCollaboration(string accessKey, string collaborationId, Action<CollaborationInfo> successCallback, Action errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			JoinCollaborationCoroutine(apiHost, accessKey, collaborationId, successCallback, errorCallback),
+			JoinCollaborationCoroutine(settingsAccessor.GetApiHost(), accessKey, collaborationId, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -311,7 +311,7 @@ class EditorRestApi : CommonRestApi
 	public void IdentifyPrefabsForCollaboration(string accessKey, string collaborationId, IdentifyPrefabsRequest identifyPrefabsRequest, Action<List<PrefabDictionaryItem>> successCallback, Action<ErrorInfo> errorCallback)
 	{
 		EditorCoroutineUtility.StartCoroutine(
-			IdentifyPrefabsForCollaborationCoroutine(apiHost, accessKey, collaborationId, identifyPrefabsRequest, successCallback, errorCallback),
+			IdentifyPrefabsForCollaborationCoroutine(settingsAccessor.GetApiHost(), accessKey, collaborationId, identifyPrefabsRequest, successCallback, errorCallback),
 			owner
 		);
 	}
@@ -347,7 +347,7 @@ class EditorRestApi : CommonRestApi
 		DebugUtils.Log(DebugContext.Publishing, $"Calling identify prefabs for publishing...");
 
 		EditorCoroutineUtility.StartCoroutine(
-			IdentifyPrefabsForPublishingCoroutine(apiHost, accessKey, identifyPrefabsRequest, successCallback, errorCallback),
+			IdentifyPrefabsForPublishingCoroutine(settingsAccessor.GetApiHost(), accessKey, identifyPrefabsRequest, successCallback, errorCallback),
 			owner
 		);
 	}

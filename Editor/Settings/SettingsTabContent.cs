@@ -16,13 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
+
 using UnityEngine;
 using UnityEditor;
 
 namespace Prefabby
 {
 
-[System.Serializable]
+[Serializable]
 public class SettingsTabContent
 {
 
@@ -253,14 +255,16 @@ public class SettingsTabContent
 		}
 
 		bool changedAccessKey = settings.accessKey != accessKeyForEdit;
-		string apiHost = Region.DeriveApiHost(regionForEdit);
-		EditorRestApi restApi = new(this, apiHost);
+		string derivedApiHost = Region.DeriveApiHost(regionForEdit);
+		// Test new settings
+		TempSettingsAccessor tempSettingsAccessor = new TempSettingsAccessor(derivedApiHost);
+		EditorRestApi restApi = new(this, tempSettingsAccessor);
 		restApi.GetUserDetails(
 			accessKeyForEdit,
 			(userInfo) => {
 				DebugUtils.Log(DebugContext.Settings, $"Verified access key, user is {userInfo.displayName} (ID: {userInfo.id})");
 
-				settings.apiHost = apiHost;
+				settings.apiHost = derivedApiHost;
 				settings.accessKey = accessKeyForEdit;
 				settings.userId = userInfo.id;
 				settings.showCollaborationLimitationsNotice = showCollaborationLimitationsNoticeForEdit;

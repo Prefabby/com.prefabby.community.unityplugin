@@ -44,14 +44,14 @@ public class PublishingTabContent
 
 	private void HandleSettingsChanged()
 	{
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 	}
 
 	public void OnEnable()
 	{
 		this.owner.OnSettingsChanged += HandleSettingsChanged;
 
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 
 		PrefabbyAssetMarkerEditor.settingsAccessor = owner.Settings;
 	}

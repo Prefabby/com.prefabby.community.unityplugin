@@ -49,14 +49,14 @@ public class BrowsingTabContent
 
 	private void HandleSettingsChanged()
 	{
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 	}
 
 	public void OnEnable()
 	{
 		owner.OnSettingsChanged += HandleSettingsChanged;
 
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 
 		RefreshItems();
 	}

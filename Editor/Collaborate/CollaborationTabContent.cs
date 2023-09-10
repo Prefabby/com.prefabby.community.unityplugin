@@ -79,7 +79,7 @@ public class CollaborationTabContent
 	{
 		DebugUtils.Log(DebugContext.General, "Settings changed");
 
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 
 		LoadCollaborations();
 	}
@@ -88,7 +88,7 @@ public class CollaborationTabContent
 	{
 		owner.OnSettingsChanged += HandleSettingsChanged;
 
-		restApi = new EditorRestApi(this, owner.Settings.apiHost);
+		restApi = new EditorRestApi(this, owner.Settings);
 
 		if (collaborationState != null && collaborationState.collaborationObject != null)
 		{

@@ -58,7 +58,7 @@ class ImportPreviewWindow : EditorWindow
 
 	public void LoadAsset()
 	{
-		EditorRestApi restApi = new(this, settingsAccessor.GetApiHost());
+		EditorRestApi restApi = new(this, settingsAccessor);
 		restApi.GetAsset(
 			storefrontAsset.id,
 			false,
