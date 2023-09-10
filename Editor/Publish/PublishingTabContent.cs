@@ -205,8 +205,9 @@ public class PublishingTabContent
 		ISerializer serializer = new JsonV1Serializer(objectToPublish, prefabDictionary);
 		SerializedTree result = serializer.Serialize();
 
-		// Reset root element transform; export should be independent from scene
+		// Reset root element details; export should be independent from scene
 		SerializedGameObject root = result.FindById(result.root);
+		root.siblingIndex = null;
 		root.position = null;
 		root.rotation = null;
 		root.scale = null;
