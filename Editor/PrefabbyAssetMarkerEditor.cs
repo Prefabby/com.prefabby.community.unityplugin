@@ -52,7 +52,7 @@ public class PrefabbyAssetMarkerEditor : Editor
 
 		if (GUILayout.Button($"Open asset on {Constants.homepage}", GUILayout.Height(32)))
 		{
-			Application.OpenURL($"{Constants.homepage}/asset/{marker.assetId}?ref=unity-plugin");
+			Application.OpenURL($"{Constants.homepage}/creations/{marker.assetId}?ref=unity-plugin");
 		}
 	}
 
