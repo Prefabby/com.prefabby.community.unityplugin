@@ -106,15 +106,62 @@ class SyntyStudioArtPackHelper : IArtPackHelper
 		}
 		else if (name.StartsWith("SM_Bld_"))
 		{
-			fullPath += "Buildings/";
+			if (hint.key.Contains("/Pnb"))
+			{
+				// No dedicated subdirectory
+			}
+			else
+			{
+				fullPath += "Buildings/";
+			}
 		}
 		else if (name.StartsWith("SM_Env_"))
 		{
-			fullPath += "Environments/";
+			if (hint.key.Contains("/Pnb"))
+			{
+				// No dedicated subdirectory
+			}
+			else if (hint.key.EndsWith("/BattleRoyale") ||
+				hint.key.EndsWith("/City") ||
+				hint.key.EndsWith("/Construction") ||
+				hint.key.EndsWith("/Dungeon") ||
+				hint.key.EndsWith("/DungeonRealms") ||
+				hint.key.EndsWith("/FantasyKingdom") ||
+				hint.key.EndsWith("/Farm") ||
+				hint.key.EndsWith("/Knights") ||
+				hint.key.EndsWith("/Pirates") ||
+				hint.key.EndsWith("/Samurai") ||
+				hint.key.EndsWith("/SciFiCity") ||
+				hint.key.EndsWith("/SciFiWorlds") ||
+				hint.key.EndsWith("/Shops") ||
+				hint.key.EndsWith("/StreetRacer") ||
+				hint.key.EndsWith("/Vikings") ||
+				hint.key.EndsWith("/War") ||
+				hint.key.EndsWith("/Western") ||
+				hint.key.EndsWith("/WesternFrontier")
+			)
+			{
+				fullPath += "Environments/";
+			}
+			else if (hint.key.EndsWith("/CyberCity"))
+			{
+				fullPath += "Env/";
+			}
+			else
+			{
+				fullPath += "Environment/";
+			}
 		}
 		else if (name.StartsWith("SM_Prop_"))
 		{
-			fullPath += "Props/";
+			if (hint.key.Contains("/Pnb"))
+			{
+				// No dedicated subdirectory
+			}
+			else
+			{
+				fullPath += "Props/";
+			}
 		}
 		else if (name.StartsWith("FX_"))
 		{
@@ -126,7 +173,14 @@ class SyntyStudioArtPackHelper : IArtPackHelper
 		}
 		else if (name.StartsWith("SM_Veh_"))
 		{
-			fullPath += "Vehicles/";
+			if (hint.key.Contains("/Pnb"))
+			{
+				// No dedicated subdirectory
+			}
+			else
+			{
+				fullPath += "Vehicles/";
+			}
 		}
 		else if (name.StartsWith("SM_Wep_"))
 		{
