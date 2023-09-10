@@ -187,8 +187,6 @@ class JsonV1Serializer : ISerializer
 					result = new()
 					{
 						id = GetOrCreateGameObjectId(sceneTransform.gameObject),
-						// We need to use the path from the original prefab, because if the name is changed, too, we won't find it right after instantiation.
-						path = EditorUtils.CreatePath(prefabTransform, prefab.transform)
 					};
 
 					serializedGo.children ??= new();
@@ -203,6 +201,8 @@ class JsonV1Serializer : ISerializer
 				if (prefabTransform.name != sceneTransform.name)
 				{
 					result.name = sceneTransform.name;
+					// We need to use the path from the original prefab, because if the name is changed, too, we won't find it right after instantiation.
+					result.path = EditorUtils.CreatePath(prefabTransform, prefab.transform);
 				}
 				if (prefabTransform.localPosition != sceneTransform.localPosition)
 				{
