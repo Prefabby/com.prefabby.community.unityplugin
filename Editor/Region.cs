@@ -103,7 +103,7 @@ class Region
 
 	public static string DeriveStorefrontApiHost(string apiHost)
 	{
-		if (apiHost.EndsWith(".app.prefabby.com"))
+		if (string.IsNullOrEmpty(apiHost) || apiHost.EndsWith(".app.prefabby.com"))
 		{
 			return "https://prefabby.com";
 		}

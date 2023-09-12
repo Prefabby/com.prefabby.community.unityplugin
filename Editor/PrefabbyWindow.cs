@@ -128,7 +128,7 @@ public class PrefabbyWindow : EditorWindow
 		EditorGUIUtility.SetIconSize(titleBarLogoSize);
 		if (GUILayout.Button(titleBarContent, GUI.titleBarStyle, GUILayout.Height(34)))
 		{
-			Application.OpenURL(Settings.apiHost);
+			Application.OpenURL("https://prefabby.com?ref=unity-plugin");
 		}
 		EditorGUIUtility.SetIconSize(Vector2.zero);
 

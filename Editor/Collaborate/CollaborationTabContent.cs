@@ -62,17 +62,20 @@ public class CollaborationTabContent
 
 	private void LoadCollaborations()
 	{
-		restApi.ListCollaborations(
-			owner.Settings.accessKey,
-			(List<CollaborationShortInfo> collaborationShortInfoList) => {
-				DebugUtils.Log(DebugContext.Collaboration, $"Loaded {collaborationShortInfoList.Count} previous collaborations");
-				previousCollaborations = collaborationShortInfoList;
-				selectedPreviousCollaboration = -1;
-			},
-			() => {
-				DebugUtils.LogError(DebugContext.Collaboration, "Failed to load previous collaborations");
-			}
-		);
+		if (owner.Settings.IsValid())
+		{
+			restApi.ListCollaborations(
+				owner.Settings.accessKey,
+				(List<CollaborationShortInfo> collaborationShortInfoList) => {
+					DebugUtils.Log(DebugContext.Collaboration, $"Loaded {collaborationShortInfoList.Count} previous collaborations");
+					previousCollaborations = collaborationShortInfoList;
+					selectedPreviousCollaboration = -1;
+				},
+				() => {
+					DebugUtils.LogError(DebugContext.Collaboration, "Failed to load previous collaborations");
+				}
+			);
+		}
 	}
 
 	private void HandleSettingsChanged()
@@ -105,7 +108,7 @@ public class CollaborationTabContent
 					"Ok"
 				);
 			}
-			else if (markers.Length == 1)
+			else if (markers.Length == 1 && owner.Settings.IsValid())
 			{
 				if (EditorUtility.DisplayDialog(
 					"Continue Prefabby Collaboration?",
@@ -183,6 +186,16 @@ public class CollaborationTabContent
 
 	private void RenderCollaborationStartGUI()
 	{
+		bool isEnabled = owner.Settings.IsValid();
+
+		if (!isEnabled)
+		{
+			EditorGUILayout.HelpBox("Please go to the settings to configure your API access first.", MessageType.Error);
+			EditorGUILayout.Space();
+		}
+
+		UnityEngine.GUI.enabled = isEnabled;
+
 		// Check if the selected transform is a collaboration
 		if (Selection.transforms.Length == 1)
 		{
@@ -276,17 +289,19 @@ public class CollaborationTabContent
 			GUILayout.EndScrollView();
 			EditorGUILayout.Space();
 
-			UnityEngine.GUI.enabled = previousCollaborations != null && selectedPreviousCollaboration > -1 && selectedPreviousCollaboration < previousCollaborations.Count;
+			UnityEngine.GUI.enabled = isEnabled && previousCollaborations != null && selectedPreviousCollaboration > -1 && selectedPreviousCollaboration < previousCollaborations.Count;
 			if (GUILayout.Button("Rejoin previous collaboration", GUILayout.Height(32)))
 			{
 				string collaborationId = previousCollaborations[selectedPreviousCollaboration].id;
 				DebugUtils.Log(DebugContext.Collaboration, $"Attempting to rejoin previous collaboration with ID {collaborationId}");
 				JoinCollaboration(Selection.transforms.Length == 0 ? null : Selection.transforms[0], null, collaborationId);
 			}
-			UnityEngine.GUI.enabled = true;
+			UnityEngine.GUI.enabled = isEnabled;
 
 			EditorGUILayout.EndVertical();
 		}
+
+		UnityEngine.GUI.enabled = true;
 	}
 
 	private void RenderCollaborationGUI()

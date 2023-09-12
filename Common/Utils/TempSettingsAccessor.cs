@@ -31,6 +31,11 @@ class TempSettingsAccessor : ISettingsAccessor
 		this.derivedApiHost = derivedApiHost;
 	}
 
+	public bool IsValid()
+	{
+		return false;
+	}
+
 	public string GetApiHost()
 	{
 		return derivedApiHost;

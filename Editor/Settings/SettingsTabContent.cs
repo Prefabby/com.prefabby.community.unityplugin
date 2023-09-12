@@ -135,6 +135,16 @@ public class SettingsTabContent
 		}
 		EditorGUILayout.Space();
 
+		if (regionForEdit > 0)
+		{
+			string apiHost = Region.DeriveApiHost(regionForEdit);
+			GUILayout.Label("No Access Key yet? Get one on the respective Prefabby homepage by clicking below:", EditorStyles.wordWrappedLabel);
+			if (GUILayout.Button($"Go to {apiHost}"))
+			{
+				Application.OpenURL(apiHost);
+			}
+		}
+
 		EditorGUILayout.EndVertical();
 
 		EditorGUILayout.Space();
@@ -217,14 +227,16 @@ public class SettingsTabContent
 
 	private void LoadCurrentSettings()
 	{
-		regionForEdit = Region.DeriveRegion(settings.apiHost);
-		showCollaborationLimitationsNoticeForEdit = settings.showCollaborationLimitationsNotice;
-		hierarchyCheckDeltaTimeForEdit = settings.hierachyCheckDeltaTime;
-		showCollaboratorSelectionForEdit = settings.showCollaboratorSelection;
-		showActivityLogForEdit = settings.showActivityLog;
-		accessKeyForEdit = settings.accessKey;
-		createBackupsForEdit = settings.createBackups;
-		forceRefreshForEdit = settings.forceRefresh;
+		Settings initializer = settings ?? ScriptableObject.CreateInstance<Settings>();
+
+		regionForEdit = Region.DeriveRegion(initializer.apiHost);
+		showCollaborationLimitationsNoticeForEdit = initializer.showCollaborationLimitationsNotice;
+		hierarchyCheckDeltaTimeForEdit = initializer.hierachyCheckDeltaTime;
+		showCollaboratorSelectionForEdit = initializer.showCollaboratorSelection;
+		showActivityLogForEdit = initializer.showActivityLog;
+		accessKeyForEdit = initializer.accessKey;
+		createBackupsForEdit = initializer.createBackups;
+		forceRefreshForEdit = initializer.forceRefresh;
 	}
 
 	private void SaveChangedSettings()

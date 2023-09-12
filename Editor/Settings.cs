@@ -38,6 +38,12 @@ public class Settings : ScriptableObject, ISettingsAccessor
 
 	#region ISettingsAccessor
 
+	public bool IsValid()
+	{
+		return !(string.IsNullOrEmpty(apiHost) || string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(userId));
+	}
+
+
 	public float GetHierachyCheckDeltaTime()
 	{
 		return hierachyCheckDeltaTime;

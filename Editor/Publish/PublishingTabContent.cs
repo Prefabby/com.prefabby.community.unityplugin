@@ -65,7 +65,15 @@ public class PublishingTabContent
 
 	public void OnGUI()
 	{
-		// Object publishing
+		bool isEnabled = owner.Settings.IsValid();
+
+		if (!isEnabled)
+		{
+			EditorGUILayout.HelpBox("Please go to the settings to configure your API access first.", MessageType.Error);
+			EditorGUILayout.Space();
+		}
+
+		UnityEngine.GUI.enabled = isEnabled;
 
 		EditorGUILayout.BeginVertical(GUI.groupStyle);
 
@@ -120,6 +128,8 @@ public class PublishingTabContent
 		}
 
 		EditorGUILayout.EndVertical();
+
+		UnityEngine.GUI.enabled = true;
 	}
 
 	public void SetObjectToPublish(GameObject go)
