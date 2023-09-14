@@ -16,6 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
+
 namespace Prefabby
 {
 
@@ -25,8 +27,12 @@ class StorefrontAsset
 	public string id;
 	public string previewImageUrl;
 	public string title;
+	public string description;
 	public string creatorId;
 	public string creatorDisplayName;
+	public int numberOfPrefabs;
+
+	public List<ArtPackHint> requiredArtPacks;
 
 }
 

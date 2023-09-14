@@ -95,7 +95,7 @@ public class BrowsingTabContent
 			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUIStyle.none, UnityEngine.GUI.skin.verticalScrollbar);
 			if (storefrontAssets == null || storefrontAssets.Count == 0)
 			{
-				EditorGUILayout.HelpBox("No assets found! Start creating one and publish it on Prefabby!", MessageType.Info);
+				EditorGUILayout.HelpBox("No creations found! Start creating one and publish it on Prefabby!", MessageType.Info);
 			}
 			else
 			{
@@ -166,7 +166,7 @@ public class BrowsingTabContent
 		if (availableArtPacks.Count != assetInfo.requiredArtPacks.Count)
 		{
 			List<ArtPackHint> missingArtPacks = assetInfo.requiredArtPacks.Except(availableArtPacks).ToList();
-			RequiredArtPacksWindow.Show(missingArtPacks, owner.Settings, "The following packs are required for this asset but seem to be missing in the project.");
+			RequiredArtPacksWindow.Show(missingArtPacks, owner.Settings, "The following packs are required for this creation but seem to be missing in the project.");
 			return;
 		}
 

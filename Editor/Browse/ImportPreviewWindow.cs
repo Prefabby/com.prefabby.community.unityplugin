@@ -19,12 +19,11 @@ class ImportPreviewWindow : EditorWindow
 	private Texture2D cross;
 
 	private StorefrontAsset storefrontAsset;
-	private AssetInfo assetInfo;
 	private List<ArtPackHint> missingArtPacks;
-	private int numberOfPrefabs = -1;
 	private Texture2D texture;
 	private ISettingsAccessor settingsAccessor;
 	private Action<AssetInfo> importCallback;
+	private bool loading = false;
 
 	private Vector2 scrollPosition = new();
 	private Vector2 descriptionScrollPos = new();
@@ -32,13 +31,12 @@ class ImportPreviewWindow : EditorWindow
 
 	public static ImportPreviewWindow Show(StorefrontAsset storefrontAsset, Texture2D texture, ISettingsAccessor settingsAccessor, Action<AssetInfo> importCallback)
 	{
-		ImportPreviewWindow window = GetWindow(typeof(ImportPreviewWindow), true, "Import Asset", false) as ImportPreviewWindow;
+		ImportPreviewWindow window = GetWindow(typeof(ImportPreviewWindow), true, "Import Creation", false) as ImportPreviewWindow;
 		window.storefrontAsset = storefrontAsset;
-		window.assetInfo = null;
 		window.texture = texture;
 		window.settingsAccessor = settingsAccessor;
 		window.importCallback = importCallback;
-		window.LoadAsset();
+		window.CheckRequiredArtPacks();
 
 		EditorUtils.CenterEditorWindow(window, 1000, 500);
 
@@ -56,36 +54,10 @@ class ImportPreviewWindow : EditorWindow
 		cross = Resources.Load("icons8-x-16") as Texture2D;
 	}
 
-	public void LoadAsset()
+	public void CheckRequiredArtPacks()
 	{
-		EditorRestApi restApi = new(this, settingsAccessor);
-		restApi.GetAsset(
-			storefrontAsset.id,
-			false,
-			(AssetInfo assetInfo) => {
-				List<ArtPackHint> availableArtPacks = EditorUtils.GetAvailableArtPacks(DebugContext.Browsing, assetInfo.requiredArtPacks);
-				missingArtPacks = assetInfo.requiredArtPacks.Except(availableArtPacks).ToList();
-				numberOfPrefabs = CountNodesWithPrefabs(assetInfo.content);
-				this.assetInfo = assetInfo;
-				Repaint();
-			},
-			() => {
-				EditorUtils.GenericError();
-			}
-		);
-	}
-
-	private int CountNodesWithPrefabs(SerializedTree tree)
-	{
-		int count = 0;
-		foreach (SerializedGameObject serializedGameObject in tree.gameObjects)
-		{
-			if (serializedGameObject.prefab != null)
-			{
-				count++;
-			}
-		}
-		return count;
+		List<ArtPackHint> availableArtPacks = EditorUtils.GetAvailableArtPacks(DebugContext.Browsing, storefrontAsset.requiredArtPacks);
+		missingArtPacks = storefrontAsset.requiredArtPacks.Except(availableArtPacks).ToList();
 	}
 
 	void OnGUI()
@@ -115,50 +87,45 @@ class ImportPreviewWindow : EditorWindow
 		GUILayout.Label($"by {storefrontAsset.creatorDisplayName}", GUI.previewCreatorStyle);
 		EditorGUILayout.LabelField("", UnityEngine.GUI.skin.horizontalSlider);
 
-		if (assetInfo == null)
+		GUILayout.Label("Description", EditorStyles.boldLabel);
+		descriptionScrollPos = GUILayout.BeginScrollView(descriptionScrollPos, EditorStyles.textArea, GUILayout.Height(100));
+		GUILayout.Label(storefrontAsset.description, EditorStyles.wordWrappedLabel);
+		GUILayout.EndScrollView();
+
+		EditorGUILayout.Space();
+
+		GUILayout.Label("Required Art Packs", EditorStyles.boldLabel);
+		requiredArtPacksScrollPos = GUILayout.BeginScrollView(requiredArtPacksScrollPos, EditorStyles.textArea, GUILayout.Height(100));
+		foreach (ArtPackHint artPack in storefrontAsset.requiredArtPacks)
 		{
-			GUI.CenteredText("Loading details...");
+			bool isMissing = missingArtPacks.Contains(artPack);
+			EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+			GUILayout.Box(isMissing ? cross : checkmark, iconStyle, GUILayout.Width(20), GUILayout.Height(20));
+			GUILayout.Label($"{artPack.name} by {artPack.publisherName}", EditorStyles.wordWrappedLabel);
+			EditorGUILayout.EndHorizontal();
 		}
-		else
+		GUILayout.EndScrollView();
+
+		EditorGUILayout.Space();
+
+		GUILayout.Label("Number of nodes with prefabs", EditorStyles.boldLabel);
+		GUILayout.Label($"{storefrontAsset.numberOfPrefabs}");
+
+		EditorGUILayout.Space();
+
+		GUILayout.FlexibleSpace();
+
+		UnityEngine.GUI.enabled = !loading;
+		if (GUILayout.Button(loading ? "Please wait..." : "Import", GUILayout.Height(32)))
 		{
-			GUILayout.Label("Description", EditorStyles.boldLabel);
-			descriptionScrollPos = GUILayout.BeginScrollView(descriptionScrollPos, EditorStyles.textArea, GUILayout.Height(100));
-			GUILayout.Label(assetInfo.description, EditorStyles.wordWrappedLabel);
-			GUILayout.EndScrollView();
+			Import();
+		}
+		EditorGUILayout.Space();
+		UnityEngine.GUI.enabled = true;
 
-			EditorGUILayout.Space();
-
-			GUILayout.Label("Required Art Packs", EditorStyles.boldLabel);
-			requiredArtPacksScrollPos = GUILayout.BeginScrollView(requiredArtPacksScrollPos, EditorStyles.textArea, GUILayout.Height(100));
-			foreach (ArtPackHint artPack in assetInfo.requiredArtPacks)
-			{
-				bool isMissing = missingArtPacks.Contains(artPack);
-				EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-				GUILayout.Box(isMissing ? cross : checkmark, iconStyle, GUILayout.Width(20), GUILayout.Height(20));
-				GUILayout.Label($"{artPack.name} by {artPack.publisherName}", EditorStyles.wordWrappedLabel);
-				EditorGUILayout.EndHorizontal();
-			}
-			GUILayout.EndScrollView();
-
-			EditorGUILayout.Space();
-
-			GUILayout.Label("Number of nodes with prefabs", EditorStyles.boldLabel);
-			GUILayout.Label($"{numberOfPrefabs}");
-
-			EditorGUILayout.Space();
-
-			GUILayout.FlexibleSpace();
-
-			if (GUILayout.Button("Import", GUILayout.Height(32)))
-			{
-				importCallback(assetInfo);
-				Close();
-			}
-			EditorGUILayout.Space();
-			if (GUILayout.Button("Close", GUILayout.Height(32)))
-			{
-				Close();
-			}
+		if (GUILayout.Button("Close", GUILayout.Height(32)))
+		{
+			Close();
 		}
 
 		// End details
@@ -170,6 +137,25 @@ class ImportPreviewWindow : EditorWindow
 		EditorGUILayout.Space();
 
 		EditorGUILayout.EndScrollView();
+	}
+
+	private void Import()
+	{
+		loading = true;
+		EditorRestApi restApi = new(this, settingsAccessor);
+		restApi.GetAsset(
+			storefrontAsset.id,
+			true,
+			(AssetInfo assetInfo) => {
+				loading = false;
+				importCallback(assetInfo);
+				Close();
+			},
+			() => {
+				loading = false;
+				EditorUtils.GenericError();
+			}
+		);
 	}
 
 }

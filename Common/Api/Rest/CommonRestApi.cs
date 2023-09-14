@@ -30,7 +30,7 @@ class CommonRestApi
 
 	protected IEnumerator GetAssetCoroutine(string apiHost, string assetId, bool count, Action<AssetInfo> successCallback, Action errorCallback)
 	{
-		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/assets/{assetId}?count={count}");
+		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/assets/{assetId}?count={JsonConvert.ToString(count)}");
 		yield return request.SendWebRequest();
 
 		DebugUtils.Log(DebugContext.RestApi, $"GetAssetCoroutine response: {request.downloadHandler.text}");
