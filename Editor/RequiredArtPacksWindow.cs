@@ -38,7 +38,7 @@ class RequiredArtPacksWindow : EditorWindow
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Details"))
 			{
-				Application.OpenURL($"{settingsAccessor.GetApiHost()}/publishers/{requiredArtPack.publisherId}/{requiredArtPack.id}");
+				Application.OpenURL($"{Region.DeriveStorefrontApiHost(settingsAccessor.GetApiHost())}/publishers/{requiredArtPack.publisherId}/{requiredArtPack.id}");
 			}
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space();
