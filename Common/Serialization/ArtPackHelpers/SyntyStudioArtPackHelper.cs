@@ -52,148 +52,163 @@ class SyntyStudioArtPackHelper : IArtPackHelper
 		DebugUtils.Log(DebugContext.Deserialization, $"Determining path for Synty Studios prefab {name}...");
 
 		string fullPath = $"{hint.path}/";
-		if (hint.key.EndsWith("/Heist"))
+
+		if (prefab.type == "Model")
 		{
-			// Heist uses Prefab instead of Prefabs
-			fullPath += "Prefab/";
+			if (hint.key.EndsWith("/Heist"))
+			{
+				fullPath += "Model/";
+			}
+			else
+			{
+				fullPath += "Models/";
+			}
 		}
 		else
 		{
-			fullPath += "Prefabs/";
-		}
-
-		// Zombies are directly in Prefabs folder and start with Zombie_
-		if (name.StartsWith("SM_Chr_") || name.StartsWith("Character_"))
-		{
-			if (hint.key.EndsWith("/GangWarfare"))
+			if (hint.key.EndsWith("/Heist"))
 			{
-				// Gang warfare pack uses Character instead of Characters
-				fullPath += "/Character";
+				// Heist uses Prefab instead of Prefabs
+				fullPath += "Prefab/";
 			}
-			else if (!hint.key.EndsWith("/CityCharacters") && !hint.key.EndsWith("/FantasyCharacters"))
+			else
 			{
-				// City characters pack and Fantasy characters packs don't have a Characters subdirectory
-				fullPath += "Characters/";
+				fullPath += "Prefabs/";
 			}
 
-			// Horror Mansion has another Characters subdirectory but that shouldn't matter
-
-			// Check if the hint contains "FixedScale" to identify fixed scale character prefabs
-			if (prefab.hint != null && prefab.hint.Contains("FixedScale"))
+			// Zombies are directly in Prefabs folder and start with Zombie_
+			if (name.StartsWith("SM_Chr_") || name.StartsWith("Character_"))
 			{
-				if (hint.key.EndsWith("/City") ||
-					hint.key.EndsWith("/FantasyCharacters") ||
-					hint.key.EndsWith("/GangWarfare") ||
-					hint.key.EndsWith("/Heist") ||
+				if (hint.key.EndsWith("/GangWarfare"))
+				{
+					// Gang warfare pack uses Character instead of Characters
+					fullPath += "/Character";
+				}
+				else if (!hint.key.EndsWith("/CityCharacters") && !hint.key.EndsWith("/FantasyCharacters"))
+				{
+					// City characters pack and Fantasy characters packs don't have a Characters subdirectory
+					fullPath += "Characters/";
+				}
+
+				// Horror Mansion has another Characters subdirectory but that shouldn't matter
+
+				// Check if the hint contains "FixedScale" to identify fixed scale character prefabs
+				if (prefab.hint != null && prefab.hint.Contains("FixedScale"))
+				{
+					if (hint.key.EndsWith("/City") ||
+						hint.key.EndsWith("/FantasyCharacters") ||
+						hint.key.EndsWith("/GangWarfare") ||
+						hint.key.EndsWith("/Heist") ||
+						hint.key.EndsWith("/Knights") ||
+						hint.key.EndsWith("/Samurai") ||
+						hint.key.EndsWith("/SciFiCity") ||
+						hint.key.EndsWith("/War") ||
+						hint.key.EndsWith("/WesternFrontier")
+					)
+					{
+						fullPath += "FixedScaleCharacters/";
+					}
+					else if (hint.key.EndsWith("/Pirates"))
+					{
+						fullPath += "FixedScaleCharacter/";
+					}
+					else if (hint.key.EndsWith("/Dungeon"))
+					{
+						fullPath += "ScaleFixedCharacters/";
+					}
+				}
+			}
+			else if (name.StartsWith("SM_Bld_Base_"))
+			{
+				// New with Dark Fantasy
+				fullPath += "Base/";
+			}
+			else if (name.StartsWith("SM_Bld_"))
+			{
+				if (hint.key.Contains("/Pnb"))
+				{
+					// No dedicated subdirectory
+				}
+				else
+				{
+					fullPath += "Buildings/";
+				}
+			}
+			else if (name.StartsWith("SM_Env_"))
+			{
+				if (hint.key.Contains("/Pnb"))
+				{
+					// No dedicated subdirectory
+				}
+				else if (hint.key.EndsWith("/BattleRoyale") ||
+					hint.key.EndsWith("/City") ||
+					hint.key.EndsWith("/Construction") ||
+					hint.key.EndsWith("/Dungeon") ||
+					hint.key.EndsWith("/DungeonRealms") ||
+					hint.key.EndsWith("/FantasyKingdom") ||
+					hint.key.EndsWith("/Farm") ||
 					hint.key.EndsWith("/Knights") ||
+					hint.key.EndsWith("/Pirates") ||
 					hint.key.EndsWith("/Samurai") ||
 					hint.key.EndsWith("/SciFiCity") ||
+					hint.key.EndsWith("/SciFiWorlds") ||
+					hint.key.EndsWith("/Shops") ||
+					hint.key.EndsWith("/StreetRacer") ||
+					hint.key.EndsWith("/Vikings") ||
 					hint.key.EndsWith("/War") ||
+					hint.key.EndsWith("/Western") ||
 					hint.key.EndsWith("/WesternFrontier")
 				)
 				{
-					fullPath += "FixedScaleCharacters/";
+					fullPath += "Environments/";
 				}
-				else if (hint.key.EndsWith("/Pirates"))
+				else if (hint.key.EndsWith("/CyberCity"))
 				{
-					fullPath += "FixedScaleCharacter/";
+					fullPath += "Env/";
 				}
-				else if (hint.key.EndsWith("/Dungeon"))
+				else
 				{
-					fullPath += "ScaleFixedCharacters/";
+					fullPath += "Environment/";
 				}
 			}
-		}
-		else if (name.StartsWith("SM_Bld_Base_"))
-		{
-			// New with Dark Fantasy
-			fullPath += "Base/";
-		}
-		else if (name.StartsWith("SM_Bld_"))
-		{
-			if (hint.key.Contains("/Pnb"))
+			else if (name.StartsWith("SM_Prop_"))
 			{
-				// No dedicated subdirectory
+				if (hint.key.Contains("/Pnb"))
+				{
+					// No dedicated subdirectory
+				}
+				else
+				{
+					fullPath += "Props/";
+				}
 			}
-			else
+			else if (name.StartsWith("FX_"))
 			{
-				fullPath += "Buildings/";
+				fullPath += "FX/";
 			}
-		}
-		else if (name.StartsWith("SM_Env_"))
-		{
-			if (hint.key.Contains("/Pnb"))
+			else if (name.StartsWith("Icon_"))
 			{
-				// No dedicated subdirectory
+				fullPath += "Icons/";
 			}
-			else if (hint.key.EndsWith("/BattleRoyale") ||
-				hint.key.EndsWith("/City") ||
-				hint.key.EndsWith("/Construction") ||
-				hint.key.EndsWith("/Dungeon") ||
-				hint.key.EndsWith("/DungeonRealms") ||
-				hint.key.EndsWith("/FantasyKingdom") ||
-				hint.key.EndsWith("/Farm") ||
-				hint.key.EndsWith("/Knights") ||
-				hint.key.EndsWith("/Pirates") ||
-				hint.key.EndsWith("/Samurai") ||
-				hint.key.EndsWith("/SciFiCity") ||
-				hint.key.EndsWith("/SciFiWorlds") ||
-				hint.key.EndsWith("/Shops") ||
-				hint.key.EndsWith("/StreetRacer") ||
-				hint.key.EndsWith("/Vikings") ||
-				hint.key.EndsWith("/War") ||
-				hint.key.EndsWith("/Western") ||
-				hint.key.EndsWith("/WesternFrontier")
-			)
+			else if (name.StartsWith("SM_Veh_"))
 			{
-				fullPath += "Environments/";
+				if (hint.key.Contains("/Pnb"))
+				{
+					// No dedicated subdirectory
+				}
+				else
+				{
+					fullPath += "Vehicles/";
+				}
 			}
-			else if (hint.key.EndsWith("/CyberCity"))
+			else if (name.StartsWith("SM_Wep_"))
 			{
-				fullPath += "Env/";
+				fullPath += "Weapons/";
 			}
-			else
+			else if (name.StartsWith("SM_Sign_"))
 			{
-				fullPath += "Environment/";
+				fullPath += "Signs/";
 			}
-		}
-		else if (name.StartsWith("SM_Prop_"))
-		{
-			if (hint.key.Contains("/Pnb"))
-			{
-				// No dedicated subdirectory
-			}
-			else
-			{
-				fullPath += "Props/";
-			}
-		}
-		else if (name.StartsWith("FX_"))
-		{
-			fullPath += "FX/";
-		}
-		else if (name.StartsWith("Icon_"))
-		{
-			fullPath += "Icons/";
-		}
-		else if (name.StartsWith("SM_Veh_"))
-		{
-			if (hint.key.Contains("/Pnb"))
-			{
-				// No dedicated subdirectory
-			}
-			else
-			{
-				fullPath += "Vehicles/";
-			}
-		}
-		else if (name.StartsWith("SM_Wep_"))
-		{
-			fullPath += "Weapons/";
-		}
-		else if (name.StartsWith("SM_Sign_"))
-		{
-			fullPath += "Signs/";
 		}
 
 		return fullPath;
