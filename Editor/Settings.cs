@@ -35,6 +35,7 @@ public class Settings : ScriptableObject, ISettingsAccessor
 	public bool showActivityLog = false;
 	public bool createBackups = true;
 	public bool forceRefresh = false;
+	public bool logging = false;
 
 	#region ISettingsAccessor
 

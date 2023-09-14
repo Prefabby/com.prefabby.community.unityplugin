@@ -47,6 +47,7 @@ public class SettingsTabContent
 	private bool stopOnInvalidGameObjectsForEdit;
 	private bool createBackupsForEdit;
 	private bool forceRefreshForEdit;
+	private bool loggingForEdit;
 
 	private string[] regionOptions;
 
@@ -199,7 +200,14 @@ public class SettingsTabContent
 
 		EditorGUILayout.BeginHorizontal();
 		showActivityLogForEdit = EditorGUILayout.Toggle("", showActivityLogForEdit, GUILayout.Width(20));
-		EditorGUILayout.LabelField("DEBUG: Show activity log");
+		EditorGUILayout.LabelField("Show activity log");
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.Space();
+
+		EditorGUILayout.BeginHorizontal();
+		loggingForEdit = EditorGUILayout.Toggle("", loggingForEdit, GUILayout.Width(20));
+		EditorGUILayout.LabelField("Logging (verbose!)");
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.Space();
@@ -237,6 +245,9 @@ public class SettingsTabContent
 		accessKeyForEdit = initializer.accessKey;
 		createBackupsForEdit = initializer.createBackups;
 		forceRefreshForEdit = initializer.forceRefresh;
+		loggingForEdit = initializer.logging;
+
+		DebugUtils.logEnabled = initializer.logging;
 	}
 
 	private void SaveChangedSettings()
@@ -285,6 +296,9 @@ public class SettingsTabContent
 				settings.showActivityLog = showActivityLogForEdit;
 				settings.createBackups = createBackupsForEdit;
 				settings.forceRefresh = forceRefreshForEdit;
+				settings.logging = loggingForEdit;
+
+				DebugUtils.logEnabled = settings.logging;
 
 				EditorUtility.SetDirty(settings);
 

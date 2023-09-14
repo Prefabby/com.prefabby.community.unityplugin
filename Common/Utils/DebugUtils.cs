@@ -82,7 +82,7 @@ public class DebugUtils
 		DebugContext.PrefabIdentification
 	};
 
-	public static bool logEnabled = true;
+	public static bool logEnabled = false;
 
 	public static void Log(DebugContext context, string message)
 	{
