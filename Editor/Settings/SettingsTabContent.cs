@@ -48,6 +48,7 @@ public class SettingsTabContent
 	private bool createBackupsForEdit;
 	private bool forceRefreshForEdit;
 	private bool loggingForEdit;
+	private bool checkForUpdateForEdit;
 
 	private string[] regionOptions;
 
@@ -144,7 +145,13 @@ public class SettingsTabContent
 			{
 				Application.OpenURL(apiHost);
 			}
+			EditorGUILayout.Space();
 		}
+
+		EditorGUILayout.BeginHorizontal();
+		checkForUpdateForEdit = EditorGUILayout.Toggle("", checkForUpdateForEdit, GUILayout.Width(20));
+		EditorGUILayout.LabelField("Check for updates");
+		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.EndVertical();
 
@@ -246,6 +253,7 @@ public class SettingsTabContent
 		createBackupsForEdit = initializer.createBackups;
 		forceRefreshForEdit = initializer.forceRefresh;
 		loggingForEdit = initializer.logging;
+		checkForUpdateForEdit = initializer.checkForUpdate;
 
 		DebugUtils.logEnabled = initializer.logging;
 	}
@@ -297,6 +305,7 @@ public class SettingsTabContent
 				settings.createBackups = createBackupsForEdit;
 				settings.forceRefresh = forceRefreshForEdit;
 				settings.logging = loggingForEdit;
+				settings.checkForUpdate = checkForUpdateForEdit;
 
 				DebugUtils.logEnabled = settings.logging;
 

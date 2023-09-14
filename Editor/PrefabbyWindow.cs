@@ -98,6 +98,11 @@ public class PrefabbyWindow : EditorWindow
 		logo = Resources.Load("PrefabbyTitle") as Texture2D;
 		titleBarContent = new GUIContent($"<size=10><b>Prefabby</b> v{Constants.version} by @digitalbreed</size>", logo);
 		titleBarLogoSize = new Vector2(32, 24);
+
+		if (!Constants.local && !Constants.devel && Settings.checkForUpdate)
+		{
+			UpdateCheck.Run(this);
+		}
 	}
 
 	void OnDisable()
