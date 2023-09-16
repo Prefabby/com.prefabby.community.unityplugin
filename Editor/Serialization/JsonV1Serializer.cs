@@ -226,6 +226,10 @@ class JsonV1Serializer : ISerializer
 				{
 					result.path = EditorUtils.CreatePath(prefabTransform, prefab.transform);
 				}
+				if (prefabTransform.parent == prefab.transform)
+				{
+					result.siblingIndex = prefabTransform.GetSiblingIndex();
+				}
 			}
 		});
 	}

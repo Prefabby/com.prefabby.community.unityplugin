@@ -232,6 +232,7 @@ public class BrowsingTabContent
 				}
 			},
 			() => {
+				loading = false;
 				EditorUtils.GenericError();
 			}
 		);
