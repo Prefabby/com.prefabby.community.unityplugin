@@ -49,7 +49,6 @@ public class UpdateCheck
 					(hash) => {
 						if (hash[0..installedVersion.Length] != installedVersion)
 						{
-							Debug.Log("GitHub version is different from installed version, prompting for update!");
 							PromptForUpdate();
 						}
 					},
