@@ -82,7 +82,7 @@ class EditorRestApi : CommonRestApi
 
 	private IEnumerator GetStorefrontAssetsCoroutine(string apiHost, string query, Action<GetStorefrontAssetsResponse> successCallback, Action errorCallback)
 	{
-		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/creations?query=" + UnityWebRequest.EscapeURL(query));
+		using UnityWebRequest request = UnityWebRequest.Get($"{apiHost}/api/v1/storefront/assets?search=" + UnityWebRequest.EscapeURL(query));
 		yield return request.SendWebRequest();
 
 		DebugUtils.Log(DebugContext.RestApi, $"GetStorefrontAssets result: {request.downloadHandler.text}");
