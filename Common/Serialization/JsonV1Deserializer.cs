@@ -84,6 +84,14 @@ class JsonV1Deserializer : IDeserializer
 				useParent = transformAtPath;
 			}
 		}
+		else if (serializedGameObject.siblingIndex is int siblingIndex)
+		{
+			// The siblingIndex might point to an existing prefab part which is modified
+			if (siblingIndex < useParent.childCount)
+			{
+				go = useParent.GetChild(siblingIndex).gameObject;
+			}
+		}
 
 		if (go == null)
 		{

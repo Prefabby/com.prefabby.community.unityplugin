@@ -194,6 +194,7 @@ class JsonV1Serializer : ISerializer
 
 					tree.gameObjects.Add(result);
 				}
+
 				if (prefabTransform.gameObject.activeSelf != sceneTransform.gameObject.activeSelf)
 				{
 					result.status = sceneTransform.gameObject.activeSelf ? SerializedGameObjectStatus.Active : SerializedGameObjectStatus.Inactive;
@@ -201,8 +202,6 @@ class JsonV1Serializer : ISerializer
 				if (prefabTransform.name != sceneTransform.name)
 				{
 					result.name = sceneTransform.name;
-					// We need to use the path from the original prefab, because if the name is changed, too, we won't find it right after instantiation.
-					result.path = EditorUtils.CreatePath(prefabTransform, prefab.transform);
 				}
 				if (prefabTransform.localPosition != sceneTransform.localPosition)
 				{
@@ -219,6 +218,13 @@ class JsonV1Serializer : ISerializer
 				if (materialReferences != null)
 				{
 					result.materials = materialReferences;
+				}
+
+				// No need to generate a path for the top-level; in fact, the SGO might already have a path (e.g. pistol in player prefab hand)
+				// Also direct children don't need a path at all
+				if (prefabTransform != prefab.transform && prefabTransform.parent != prefab.transform)
+				{
+					result.path = EditorUtils.CreatePath(prefabTransform, prefab.transform);
 				}
 			}
 		});

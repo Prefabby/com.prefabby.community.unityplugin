@@ -39,11 +39,11 @@ class EditorInstanceCreator : IInstanceCreator
 		for (int i = 0; i < guids.Length; ++i)
 		{
 			string prefabPath = AssetDatabase.GUIDToAssetPath(guids[i]);
-			DebugUtils.Log(DebugContext.Deserialization, $"Checking if prefab path {prefabPath} contains path {path} and ends with {name}.{extension}...");
+			DebugUtils.Log(DebugContext.Deserialization, $"Checking if prefab path {prefabPath} contains path {path} and ends with /{name}.{extension}...");
 
-			// Make sure the found prefab ends with the requested name/extension,
+			// Make sure the found prefab has the requested name/extension,
 			// see material method below for a more specific example
-			if (prefabPath.Contains(path, StringComparison.OrdinalIgnoreCase) && prefabPath.EndsWith($"{name}.{extension}", StringComparison.OrdinalIgnoreCase))
+			if (prefabPath.Contains(path, StringComparison.OrdinalIgnoreCase) && prefabPath.EndsWith($"/{name}.{extension}", StringComparison.OrdinalIgnoreCase))
 			{
 				DebugUtils.Log(DebugContext.Deserialization, $"Found {unityType} {name} at: {prefabPath}");
 
@@ -73,7 +73,8 @@ class EditorInstanceCreator : IInstanceCreator
 
 			// When searching for "Wall_01_A", this method may find e.g. "Wall_01_Alt_01_Triplanar", too.
 			// Therefore we're making sure the file ends with the requested name.
-			if (prefabPath.Contains(path, StringComparison.OrdinalIgnoreCase) && prefabPath.EndsWith($"{name}.mat", StringComparison.OrdinalIgnoreCase))
+			// To avoid that phone.prefab finds gramophone.prefab, too, we also include the leading slash.
+			if (prefabPath.Contains(path, StringComparison.OrdinalIgnoreCase) && prefabPath.EndsWith($"/{name}.mat", StringComparison.OrdinalIgnoreCase))
 			{
 				DebugUtils.Log(DebugContext.Deserialization, $"Found material {name} at: {prefabPath}");
 				return (Material) AssetDatabase.LoadAssetAtPath(prefabPath, typeof(Material));
