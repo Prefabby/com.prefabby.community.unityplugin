@@ -31,7 +31,7 @@ class PolyperfectArtPackHelper : IArtPackHelper
 	{
 		string hint = "";
 
-		if (prefabPath.EndsWith("_M"))
+		if (prefabPath.EndsWith("_M") || prefabPath.Contains("_M/"))
 		{
 			hint += "Material";
 		}
