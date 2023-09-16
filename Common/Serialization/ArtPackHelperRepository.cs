@@ -27,9 +27,10 @@ class ArtPackHelperRepository
 {
 
 	private static readonly Dictionary<string, IArtPackHelper> artPackHelpers = new()
-	{{
-		"SyntyStudios", new SyntyStudioArtPackHelper()
-	}};
+	{
+		{ "SyntyStudios", new SyntyStudioArtPackHelper() },
+		{ "polyperfect", new PolyperfectArtPackHelper() }
+	};
 
 	public static bool TryGetArtPackHelper(string key, out IArtPackHelper artPackHelper)
 	{
