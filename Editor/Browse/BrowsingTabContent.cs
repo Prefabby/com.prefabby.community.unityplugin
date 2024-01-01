@@ -32,7 +32,7 @@ public class BrowsingTabContent
 
 	private const int itemsPerColumn = 3;
 
-	private readonly PrefabbyWindow owner;
+	private readonly PrefabbyCommunityWindow owner;
 
 	private EditorRestApi restApi;
 
@@ -42,7 +42,7 @@ public class BrowsingTabContent
 	private List<StorefrontAsset> storefrontAssets;
 	private Dictionary<string, Texture2D> textures;
 
-	public BrowsingTabContent(PrefabbyWindow owner)
+	public BrowsingTabContent(PrefabbyCommunityWindow owner)
 	{
 		this.owner = owner;
 	}

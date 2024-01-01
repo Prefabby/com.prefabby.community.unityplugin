@@ -1,9 +1,9 @@
 {
-    "name": "com.prefabby.unityplugin.Editor",
+    "name": "com.prefabby.community.unityplugin.Editor",
     "rootNamespace": "",
     "references": [
-		"com.prefabby.unityplugin.Common",
-        "com.prefabby.unityplugin.Runtime",
+		"com.prefabby.community.unityplugin.Common",
+        "com.prefabby.community.unityplugin.Runtime",
         "Unity.EditorCoroutines.Editor",
         "Newtonsoft.Json",
         "Newtonsoft.Json.Linq"

@@ -26,7 +26,7 @@ using Unity.EditorCoroutines.Editor;
 namespace Prefabby
 {
 
-public class PrefabbyWindow : EditorWindow
+public class PrefabbyCommunityWindow : EditorWindow
 {
 
 	public event Action OnSettingsChanged;
@@ -60,21 +60,21 @@ public class PrefabbyWindow : EditorWindow
 	private GUIContent titleBarContent;
 	private Vector2 titleBarLogoSize;
 
-	[MenuItem("Tools/Prefabby")]
-	public static PrefabbyWindow Init()
+	[MenuItem("Tools/Prefabby Community")]
+	public static PrefabbyCommunityWindow Init()
 	{
 		GUIContent titleContent = new()
 		{
-			text = "Prefabby"
+			text = "Prefabby Community"
 		};
 
-		PrefabbyWindow window = GetWindow(typeof(PrefabbyWindow)) as PrefabbyWindow;
+		PrefabbyCommunityWindow window = GetWindow(typeof(PrefabbyCommunityWindow)) as PrefabbyCommunityWindow;
 		window.titleContent = titleContent;
 
 		return window;
 	}
 
-	public PrefabbyWindow()
+	public PrefabbyCommunityWindow()
 	{
 		browsingTabContent = new BrowsingTabContent(this);
 		publishingTabContent = new PublishingTabContent(this);
@@ -96,7 +96,7 @@ public class PrefabbyWindow : EditorWindow
 		tickCoroutine = EditorCoroutineUtility.StartCoroutine(Tick(), this);
 
 		logo = Resources.Load("PrefabbyTitle") as Texture2D;
-		titleBarContent = new GUIContent($"<size=10><b>Prefabby</b> v{Constants.version} by @digitalbreed</size>", logo);
+		titleBarContent = new GUIContent($"<size=10><b>Prefabby Community</b> v{Constants.version} by @digitalbreed</size>", logo);
 		titleBarLogoSize = new Vector2(32, 24);
 
 		if (!Constants.local && !Constants.devel && Settings.checkForUpdate)

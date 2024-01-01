@@ -33,14 +33,14 @@ class CollaborationController
 	private readonly EditorInstanceCreator editorInstanceCreator = new();
 	private readonly EditorSerializationErrorHandler editorSerializationErrorHandler = new();
 
-	private readonly PrefabbyWindow owner;
+	private readonly PrefabbyCommunityWindow owner;
 	private readonly CollaborationState state;
 	private readonly EditorRestApi restApi;
 	private readonly StompApi stompApi;
 	private readonly PrefabIdentification prefabIdentification;
 	private readonly Action stopAction;
 
-	public CollaborationController(PrefabbyWindow owner, CollaborationState state, EditorRestApi restApi, StompApi stompApi, Action stopAction)
+	public CollaborationController(PrefabbyCommunityWindow owner, CollaborationState state, EditorRestApi restApi, StompApi stompApi, Action stopAction)
 	{
 		this.owner = owner;
 		this.state = state;

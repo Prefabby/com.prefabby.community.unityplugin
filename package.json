@@ -1,9 +1,9 @@
 {
-	"name": "com.prefabby.unityplugin",
-	"displayName": "Prefabby",
-	"version": "0.1.0",
+	"name": "com.prefabby.community.unityplugin",
+	"displayName": "Prefabby Community",
+	"version": "0.2.0",
 	"unity": "2021.3",
-	"description": "Prefabby is a platform to share, download and remix creations built out of prefabs.",
+	"description": "Prefabby Community is a platform to share, download and remix creations built out of prefabs.",
 	"author": {
 		"name": "Matthias Gall",
 		"email": "matt@prefabby.com",

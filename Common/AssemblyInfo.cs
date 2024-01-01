@@ -19,4 +19,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("com.prefabby.Screenshot")]
-[assembly: InternalsVisibleTo("com.prefabby.unityplugin.Editor")]
+[assembly: InternalsVisibleTo("com.prefabby.community.unityplugin.Editor")]

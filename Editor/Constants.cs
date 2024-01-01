@@ -23,7 +23,7 @@ public class Constants
 {
 
 	// Should match package.json
-	public const string version = "0.1.0";
+	public const string version = "0.2.0";
 
 	public const bool local = false;
 	public const bool devel = false;

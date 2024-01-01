@@ -39,11 +39,11 @@ public class PrefabbyAssetMarkerEditor : Editor
 
 		if (settingsAccessor != null && settingsAccessor.GetUserId() == marker.creatorId)
 		{
-			EditorGUILayout.LabelField("This is your asset. You can publish updates in the Prefabby Publish window.");
+			EditorGUILayout.LabelField("This is your asset. You can publish updates in the Prefabby Community window.");
 
-			if (GUILayout.Button("Open Prefabby Publish", GUILayout.Height(32)))
+			if (GUILayout.Button("Open Prefabby Community", GUILayout.Height(32)))
 			{
-				PrefabbyWindow window = PrefabbyWindow.Init();
+				PrefabbyCommunityWindow window = PrefabbyCommunityWindow.Init();
 				window.SetObjectToPublish(marker.gameObject);
 			}
 		}

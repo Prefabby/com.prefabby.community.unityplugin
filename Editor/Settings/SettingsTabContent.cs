@@ -33,7 +33,7 @@ public class SettingsTabContent
 	[SerializeField]
 	private Settings settings;
 
-	private readonly PrefabbyWindow owner;
+	private readonly PrefabbyCommunityWindow owner;
 
 	private int regionForEdit;
 	private string regionError;
@@ -60,7 +60,7 @@ public class SettingsTabContent
 		}
 	}
 
-	public SettingsTabContent(PrefabbyWindow owner)
+	public SettingsTabContent(PrefabbyCommunityWindow owner)
 	{
 		this.owner = owner;
 	}

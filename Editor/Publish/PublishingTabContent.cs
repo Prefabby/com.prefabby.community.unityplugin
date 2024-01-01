@@ -26,7 +26,7 @@ namespace Prefabby
 public class PublishingTabContent
 {
 
-	private readonly PrefabbyWindow owner;
+	private readonly PrefabbyCommunityWindow owner;
 
 	private EditorRestApi restApi;
 
@@ -37,7 +37,7 @@ public class PublishingTabContent
 	private bool assetTitleError;
 	public string assetDescription;
 
-	public PublishingTabContent(PrefabbyWindow owner)
+	public PublishingTabContent(PrefabbyCommunityWindow owner)
 	{
 		this.owner = owner;
 	}

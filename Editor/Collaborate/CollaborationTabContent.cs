@@ -34,7 +34,7 @@ public class CollaborationTabContent
 	private const string defaultPrefabbyRootGameObjectName = "Prefabby Collaboration";
 	private readonly JsonConverter[] debugJsonConverters = new JsonConverter[]{ new Vector3JsonConverter(), new QuaternionJsonConverter() };
 
-	private readonly PrefabbyWindow owner;
+	private readonly PrefabbyCommunityWindow owner;
 
 	[SerializeField]
 	private CollaborationState collaborationState = null;
@@ -55,7 +55,7 @@ public class CollaborationTabContent
 	private List<CollaborationShortInfo> previousCollaborations;
 	private int selectedPreviousCollaboration = -1;
 
-	public CollaborationTabContent(PrefabbyWindow owner)
+	public CollaborationTabContent(PrefabbyCommunityWindow owner)
 	{
 		this.owner = owner;
 	}

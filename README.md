@@ -2,11 +2,11 @@
     <img src="Images/PrefabbyLogo.png" alt="Prefabby logo" title="Prefabby" align="right" height="60" />
 </a>
 
-# Prefabby Unity Plugin
+# Prefabby Community Unity Plugin
 
 Prefabby is a platform to collaboratively build, share, and remix creations made out of prefab art packs; currently available for Unity and Godot.
 
-This repository hosts the Prefabby plugin for the Unity game engine.
+This repository hosts the Prefabby Community plugin for the Unity game engine.
 
 ## 💡 About the Unity plugin
 
@@ -31,7 +31,7 @@ You'll see the "Your account" page where you can choose a display name and gener
 
 In your Unity project, open the Package Manager window and click on the + icon in the top left, then select "Add package from Git URL...". Copy this URL into the input field which popups up:
 
-	https://github.com/Prefabby/com.prefabby.unityplugin.git
+	https://github.com/Prefabby/com.prefabby.community.unityplugin.git
 
 Once the plugin is installed, you will find a new menu entry Tools->Prefabby in your menu bar. Click it to open the Prefabby window and dock it somewhere to your liking.
 

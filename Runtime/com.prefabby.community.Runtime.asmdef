@@ -1,6 +1,8 @@
 {
-	"name": "com.prefabby.unityplugin.Common",
-	"references": [],
+	"name": "com.prefabby.community.unityplugin.Runtime",
+	"references": [
+		"com.prefabby.community.unityplugin.Common"
+	],
 	"includePlatforms": [],
 	"excludePlatforms": [],
 	"allowUnsafeCode": false,
