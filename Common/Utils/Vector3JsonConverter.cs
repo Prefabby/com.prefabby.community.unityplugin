@@ -1,6 +1,6 @@
 /*
 	Prefabby Unity plugin
-	Copyright (C) 2023  Matthias Gall <matt@prefabby.com>
+	Copyright (C) 2023-2024  Matthias Gall <matt@prefabby.com>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
